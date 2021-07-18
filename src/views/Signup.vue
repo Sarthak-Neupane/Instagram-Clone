@@ -41,6 +41,19 @@
 
           <div class="input1 inputs">
             <input
+              type="text"
+              id="userName"
+              name="userName"
+              class="input"
+              v-model="username"
+              @click="labelUpUsername()"
+              ref="userName"
+            />
+            <label for="userName" class="hello">Display Name</label>
+          </div>
+
+          <div class="input1 inputs">
+            <input
               type="email"
               id="email"
               name="email"
@@ -92,6 +105,7 @@ export default {
       lastName: "",
       email: "",
       password: "",
+      username: "",
       error: null,
       loading: false,
     };
@@ -100,20 +114,30 @@ export default {
     Google,
   },
   methods: {
-    close(){
-      this.error = null
+    close() {
+      this.error = null;
     },
     async signup() {
+      // const lastNameInitial = this.lastName.charAt(0).toUpperCase();
+      // const lastNameAfter = this.lastName.slice(1);
+      // const lastName = lastNameInitial + lastNameAfter;
+
+      // const firstNameInitial = this.firstName.charAt(0).toUpperCase();
+      // const firstNameAfter = this.firstName.slice(1);
+      // const firstName = firstNameInitial + firstNameAfter;
       try {
         await this.$store.dispatch("auth/signUp", {
           email: this.email,
           password: this.password,
           firstName: this.firstName,
           lastName: this.lastName,
+          username: this.username
         });
 
-        if (this.$store.getters["auth/get_the_user"]) {
-          this.$router.replace("/home");
+        const userAccount = this.$store.getters["auth/get_the_user"];
+
+        if (userAccount) {
+          this.$router.replace(`/${userAccount.uid}/profile`);
         }
       } catch (error) {
         this.error = error.message;
@@ -130,6 +154,9 @@ export default {
     },
     labelUppassword() {
       this.$refs.password.nextElementSibling.classList.add("active");
+    },
+    labelUpUsername() {
+      this.$refs.userName.nextElementSibling.classList.add("active");
     },
   },
 };

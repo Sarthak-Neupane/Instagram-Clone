@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 // Import needed firebase modules
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 // Firebase app config
 const firebaseConfig = {
@@ -20,6 +21,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const timestamp = firebase.firestore.FieldValue.serverTimestamp;
 const auth = firebase.auth();
+const storage = firebase.storage();
 
 // export utils/refs
-export { db, auth, timestamp };
+export { db, auth, storage, timestamp };

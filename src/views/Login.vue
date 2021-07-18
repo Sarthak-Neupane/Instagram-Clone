@@ -81,8 +81,9 @@ export default {
           email: this.email,
           password: this.password,
         });
-        if (this.$store.getters["auth/get_the_user"]) {
-          this.$router.replace("/home");
+        const userAccount = this.$store.getters["auth/get_the_user"];
+        if (userAccount) {
+          this.$router.replace(`/${userAccount.uid}/feed`);
         }
       } catch (error) {
         this.error = error.message;
