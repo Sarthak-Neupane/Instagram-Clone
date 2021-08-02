@@ -39,7 +39,7 @@
             <label for="lastName" class="hello">LastName</label>
           </div>
 
-          <div class="input1 inputs">
+          <!-- <div class="input1 inputs">
             <input
               type="text"
               id="userName"
@@ -50,7 +50,7 @@
               ref="userName"
             />
             <label for="userName" class="hello">Display Name</label>
-          </div>
+          </div> -->
 
           <div class="input1 inputs">
             <input
@@ -85,7 +85,7 @@
           </p>
           <div class="google_auth">
             <p>OR</p>
-            <button type="button">
+            <button type="button" @click="signUpWithGoogle">
               <Google /> <span>Sign Up with google </span>
             </button>
           </div>
@@ -108,6 +108,7 @@ export default {
       username: "",
       error: null,
       loading: false,
+     
     };
   },
   components: {
@@ -140,6 +141,21 @@ export default {
           this.$router.replace(`/${userAccount.uid}/profile`);
         }
       } catch (error) {
+        this.error = error.message;
+      }
+    },
+    async signUpWithGoogle() {
+      console.log('hello')
+      try {
+        await this.$store.dispatch("auth/signUpWithGoogle");
+
+        const userAccount = this.$store.getters["auth/get_the_user"];
+
+        if (userAccount) {
+          this.$router.replace(`/${userAccount.uid}/profile`);
+        }
+      } catch (error) {
+        console.log(error)
         this.error = error.message;
       }
     },

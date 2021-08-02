@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 // import { auth } from "../firebase";
+import store from "../store/index.js";
 
 const routes = [
   {
     path: "/",
-    redirect: "/feed",
+    redirect: "/:id/feed",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Feed.vue"),
     meta: {
@@ -48,15 +49,15 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-//   const isAuthenticated = auth.currentUser;
-//   console.log("isauthenticated", isAuthenticated);
-//   if (requiresAuth && !isAuthenticated) {
-//     next("/login");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const isAuthenticated = store.getters["auth/get_the_user"];
+  console.log("isauthenticated", isAuthenticated);
+  if (requiresAuth && !isAuthenticated) {
+    next("/login");
+  } else {
+    next();
+  }
+});
 
 export default router;

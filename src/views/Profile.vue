@@ -3,7 +3,8 @@
     <section>
       <div class="top__half">
         <div class="display_pic">
-          <img src="../assets/profilePic.jpg" alt="" />
+          <!-- <img src="../assets/profilePic.jpg" alt="" /> -->
+          <img :src="getUser.photoURL" alt="" />
         </div>
         <div class="about">
           <div class="header">

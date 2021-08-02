@@ -49,7 +49,7 @@
           </p>
           <div class="google_auth">
             <p>OR</p>
-            <button type="button">
+            <button type="button" @click="signUpWithGoogle">
               <Google /> <span>Log in with google </span>
             </button>
           </div>
@@ -86,6 +86,20 @@ export default {
           this.$router.replace(`/${userAccount.uid}/feed`);
         }
       } catch (error) {
+        this.error = error.message;
+      }
+    },
+     async signUpWithGoogle() {
+      try {
+        await this.$store.dispatch("auth/signUpWithGoogle");
+
+        const userAccount = this.$store.getters["auth/get_the_user"];
+
+        if (userAccount) {
+          this.$router.replace(`/${userAccount.uid}/feed`);
+        }
+      } catch (error) {
+        console.log(error)
         this.error = error.message;
       }
     },

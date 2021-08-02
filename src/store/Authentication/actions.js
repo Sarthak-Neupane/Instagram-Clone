@@ -1,4 +1,4 @@
-import { auth } from "../../firebase";
+import { auth, provider } from "../../firebase";
 
 export default {
   async signUp(context, payload) {
@@ -8,6 +8,13 @@ export default {
       displayName: `${payload.username}`,
     });
     context.commit("sign_up_the_user", auth.currentUser);
+  },
+
+  async signUpWithGoogle(context) {
+   const result = await auth.signInWithPopup(provider)
+   const user = result.user
+
+    context.commit("sign_up_the_user", user);
   },
 
   async logIn(context, payload) {
