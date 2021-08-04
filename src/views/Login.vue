@@ -23,7 +23,6 @@
               name="email"
               class="input"
               v-model="email"
-              @click="labelUpemail()"
               ref="email"
             />
             <label for="email" class="hello">Email</label>
@@ -36,17 +35,19 @@
               name="password"
               class="input"
               v-model="password"
-              @click="labelUppassword()"
               ref="password"
             />
             <label for="password" class="hello">Password</label>
           </div>
 
           <input type="submit" class="submit" value="Login" />
-          <p>
-            Don't have an account?
+          <div class="para">
+            <div class="text"> Don't have an account?</div>
+            <div class="link">
+
             <router-link to="/signup">Sign Up now</router-link>
-          </p>
+            </div>
+          </div>
           <div class="google_auth">
             <p>OR</p>
             <button type="button" @click="signUpWithGoogle">
@@ -103,22 +104,38 @@ export default {
         this.error = error.message;
       }
     },
-    labelUpFirstname() {
-      this.$refs.firstName.nextElementSibling.classList.add("active");
-    },
-    labelUpLastname() {
-      this.$refs.lastName.nextElementSibling.classList.add("active");
-    },
-    labelUpemail() {
-      this.$refs.email.nextElementSibling.classList.add("active");
-    },
-    labelUppassword() {
-      this.$refs.password.nextElementSibling.classList.add("active");
-    },
+    // labelUpFirstname() {
+    //   this.$refs.firstName.nextElementSibling.classList.add("active");
+    // },
+    // labelUpLastname() {
+    //   this.$refs.lastName.nextElementSibling.classList.add("active");
+    // },
+    // labelUpemail() {
+    //   this.$refs.email.nextElementSibling.classList.add("active");
+    // },
+    // labelUppassword() {
+    //   this.$refs.password.nextElementSibling.classList.add("active");
+    // },
     close() {
       this.error = null;
     },
   },
+   watch:{
+      password: function(val){
+        if(val !== ""){
+         this.$refs.password.nextElementSibling.classList.add("active");
+        }else{
+           this.$refs.password.nextElementSibling.classList.remove("active");
+        }
+      },
+      email: function(val){
+        if(val !== ""){
+          this.$refs.email.nextElementSibling.classList.add("active");
+        }else{
+           this.$refs.email.nextElementSibling.classList.remove("active");
+        }
+      }
+    },
 };
 </script>
 
@@ -174,7 +191,7 @@ section {
 .container {
   width: 30vw;
   min-width: 20rem;
-  height: 80vh;
+  // height: 80vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -226,6 +243,7 @@ section {
   background-size: 30%;
   background-position: 50% 50%;
   background-repeat: no-repeat;
+  padding: 4rem;
 }
 
 .container .form-contain .header h1 {
@@ -318,7 +336,7 @@ section {
   color: black;
 }
 
-.container .form-contain form p {
+.container .form-contain form .para {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -331,7 +349,7 @@ section {
   align-items: center;
 }
 
-.container .form-contain form p a {
+.container .form-contain form .para a {
   text-decoration: none;
   color: #16811c;
   padding: 0.4rem;
@@ -388,5 +406,17 @@ section {
   .title {
     font-size: 1.3rem;
   }
+}
+@media screen and (min-width: 768px) {
+  .container{
+    width: 30rem;
+    // height: 60vh;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .para{
+    flex-direction: column;
+  }
+
 }
 </style>

@@ -1,5 +1,14 @@
 <template>
-  <main class="profile__container">
+  <base-dialog
+    v-if="error"
+    @close-dialog="close"
+    mode="red"
+    circleMode="circleRed"
+  >
+    <template #title> Couldn't Sign Out. Please Try Again. </template>
+    <template #main> {{ error }} </template>
+  </base-dialog>
+  <main v-else class="profile__container">
     <section>
       <div class="top__half">
         <div class="display_pic">
@@ -26,15 +35,42 @@
         </div>
       </div>
     </section>
+    <button class="signout" @click="signout">Signout</button>
   </main>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      error: null,
+      loading: false,
+    };
+  },
   computed: {
     getUser() {
-      console.log(this.$store.getters["auth/get_the_user"]);
-      return this.$store.getters["auth/get_the_user"];
+      let currentUser = this.$store.getters["auth/get_the_user"];
+      if (currentUser) {
+        return currentUser;
+      } else {
+        return JSON.parse(localStorage.getItem("User"));
+      }
+    },
+  },
+  methods: {
+    async signout() {
+      try {
+        this.loading = true
+        await this.$store.dispatch("auth/sign_out");
+        this.loading= false
+        this.$router.replace({ name: "Login" });
+      } catch (error) {
+        console.log(error);
+        this.error = error.message;
+      }
+    },
+    close() {
+      this.error = null;
     },
   },
 };
@@ -81,6 +117,11 @@ main {
         border: 1px solid red;
       }
     }
+  }
+  .signout {
+    background: red;
+    color: white;
+    font-size: 3rem;
   }
 }
 </style>

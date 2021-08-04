@@ -7,6 +7,7 @@ export default {
     await auth.currentUser.updateProfile({
       displayName: `${payload.username}`,
     });
+   
     context.commit("sign_up_the_user", auth.currentUser);
   },
 
@@ -20,5 +21,9 @@ export default {
   async logIn(context, payload) {
     await auth.signInWithEmailAndPassword(payload.email, payload.password);
     context.commit("log_in_the_user", auth.currentUser);
+  },
+  async sign_out(context) {
+    await auth.signOut()
+    context.commit("sign_the_user_out")
   },
 };

@@ -20,7 +20,6 @@
               name="firstName"
               class="input"
               v-model="firstName"
-              @click="labelUpFirstname()"
               ref="firstName"
             />
             <label for="firstName" class="hello">FirstName</label>
@@ -33,7 +32,6 @@
               name="lastName"
               class="input"
               v-model="lastName"
-              @click="labelUpLastname()"
               ref="lastName"
             />
             <label for="lastName" class="hello">LastName</label>
@@ -46,7 +44,6 @@
               name="userName"
               class="input"
               v-model="username"
-              @click="labelUpUsername()"
               ref="userName"
             />
             <label for="userName" class="hello">Display Name</label>
@@ -59,7 +56,6 @@
               name="email"
               class="input"
               v-model="email"
-              @click="labelUpemail()"
               ref="email"
             />
             <label for="email" class="hello">Email</label>
@@ -72,17 +68,21 @@
               name="password"
               class="input"
               v-model="password"
-              @click="labelUppassword()"
               ref="password"
             />
             <label for="password" class="hello">Password</label>
           </div>
 
           <input type="submit" class="submit" value="Sign Up" />
-          <p>
-            Already have an account?
+          <div class="para">
+            <div class="text">
+               Already have an account?
+            </div>
+            <div class="link">
+
             <router-link to="/login">Log In</router-link>
-          </p>
+            </div>
+          </div>
           <div class="google_auth">
             <p>OR</p>
             <button type="button" @click="signUpWithGoogle">
@@ -132,7 +132,7 @@ export default {
           password: this.password,
           firstName: this.firstName,
           lastName: this.lastName,
-          username: this.username
+          // username: this.username
         });
 
         const userAccount = this.$store.getters["auth/get_the_user"];
@@ -159,22 +159,52 @@ export default {
         this.error = error.message;
       }
     },
-    labelUpFirstname() {
-      this.$refs.firstName.nextElementSibling.classList.add("active");
-    },
-    labelUpLastname() {
-      this.$refs.lastName.nextElementSibling.classList.add("active");
-    },
-    labelUpemail() {
-      this.$refs.email.nextElementSibling.classList.add("active");
-    },
-    labelUppassword() {
-      this.$refs.password.nextElementSibling.classList.add("active");
-    },
-    labelUpUsername() {
-      this.$refs.userName.nextElementSibling.classList.add("active");
-    },
+    // labelUpFirstname() {
+    //   this.$refs.firstName.nextElementSibling.classList.add("active");
+    // },
+    // labelUpLastname() {
+    //   this.$refs.lastName.nextElementSibling.classList.add("active");
+    // },
+    // labelUpemail() {
+    //   this.$refs.email.nextElementSibling.classList.add("active");
+    // },
+    // labelUppassword() {
+    //   this.$refs.password.nextElementSibling.classList.add("active");
+    // },
+    // labelUpUsername() {
+    //   this.$refs.userName.nextElementSibling.classList.add("active");
+    // },
   },
+   watch:{
+      firstName: function(val){
+        if(val !== ""){
+          this.$refs.firstName.nextElementSibling.classList.add("active");
+        }else{
+           this.$refs.firstName.nextElementSibling.classList.remove("active");
+        }
+      },
+      lastName: function(val){
+        if(val !== ""){
+           this.$refs.lastName.nextElementSibling.classList.add("active");
+        }else{
+           this.$refs.lastName.nextElementSibling.classList.remove("active");
+        }
+      },
+      password: function(val){
+        if(val !== ""){
+         this.$refs.password.nextElementSibling.classList.add("active");
+        }else{
+           this.$refs.password.nextElementSibling.classList.remove("active");
+        }
+      },
+      email: function(val){
+        if(val !== ""){
+          this.$refs.email.nextElementSibling.classList.add("active");
+        }else{
+           this.$refs.email.nextElementSibling.classList.remove("active");
+        }
+      }
+    },
 };
 </script>
 
@@ -210,7 +240,8 @@ section {
 .container {
   width: 30vw;
   min-width: 20rem;
-  height: 80vh;
+  // height: 83vh;
+  max-width: 40rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -262,6 +293,7 @@ section {
   background-size: 30%;
   background-position: 50% 50%;
   background-repeat: no-repeat;
+  padding: 2rem;
 }
 
 .container .form-contain .header h1 {
@@ -354,7 +386,7 @@ section {
   color: black;
 }
 
-.container .form-contain form p {
+.container .form-contain form .para {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -367,7 +399,7 @@ section {
   align-items: center;
 }
 
-.container .form-contain form p a {
+.container .form-contain form .para a {
   text-decoration: none;
   color: #16811c;
   padding: 0.4rem;
@@ -423,6 +455,28 @@ section {
 @media screen and (max-width: 768px) {
   .title {
     font-size: 1.3rem;
+  }
+
+  .google_auth {
+
+  p {
+    margin: 0rem 0 0 0;
+  }
+  button{
+    font-size: .8rem;
+    padding: .4rem;
+  }
+  }
+}
+@media screen and (min-width: 768px) {
+  .container{
+    width: 30rem;
+    // height: 60vh;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .para{
+    flex-direction: column;
   }
 }
 </style>

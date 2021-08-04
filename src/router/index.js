@@ -51,13 +51,18 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  const isAuthenticated = store.getters["auth/get_the_user"];
-  console.log("isauthenticated", isAuthenticated);
+  let isAuthenticated;
+  if(localStorage.getItem('User')){
+    isAuthenticated = JSON.parse(localStorage.getItem('User'))
+  }else {
+     isAuthenticated = store.getters["auth/get_the_user"];
+  }
   if (requiresAuth && !isAuthenticated) {
-    next("/login");
+    next({ name: "Login" });
   } else {
     next();
   }
+  console.log("isauthenticated", JSON.parse(localStorage.getItem('User')));
 });
 
 export default router;
