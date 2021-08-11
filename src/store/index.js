@@ -7,6 +7,7 @@ import actions from "./actions"
 
 
 import authentication from './Authentication/index.js'
+import database from './Database/index.js'
 
 export default createStore({
   state() {
@@ -16,6 +17,7 @@ export default createStore({
   mutations,
   actions,
   modules: {
-    auth : authentication
+    auth : authentication,
+    database: database
   },
 });

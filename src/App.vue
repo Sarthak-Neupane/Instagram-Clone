@@ -1,10 +1,16 @@
 <template>
+  <!-- <Header /> -->
+  <Header v-if="!$route.meta.hideNavbar"></Header>
   <router-view />
 </template>
 
 <script>
 // import { auth } from "./firebase";
+import Header from './components/Navbar.vue'
 export default {
+  components:{
+    Header
+  },
   created() {
     // console.log(auth);
   },

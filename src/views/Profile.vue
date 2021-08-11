@@ -8,27 +8,27 @@
     <template #title> Couldn't Sign Out. Please Try Again. </template>
     <template #main> {{ error }} </template>
   </base-dialog>
-  <main v-else class="profile__container">
+  <main v-if="!error && !loading" class="profile__container">
     <section v-if="width > 768">
       <div class="top__half">
         <div class="display_pic">
-          <img v-if="!getUser.photoURL" src="../assets/profilePic.jpg" alt="" />
-          <img v-else :src="getUser.photoURL" alt="" />
+          <img v-if="!getUserInfo.photoURL" src="../assets/profile.webp" alt="" />
+          <img v-else :src="getUserInfo.photoURL" alt="" />
         </div>
         <div class="about">
           <div class="header">
-            <div class="username"><p>sa_rt_hak_</p></div>
+            <div class="username"><p>{{ getUserInfo.displayName }}</p></div>
             <div class="edit_profile">
               <button>Edit Profile</button>
             </div>
           </div>
           <div class="body">
-            <div class="goals item"><span>2</span> goals</div>
-            <div class="fans item"><span>118</span> fans</div>
-            <div class="following item"><span>177</span> following</div>
+            <div class="goals item"><span>{{ getUserInfo.goals }}</span> goals</div>
+            <div class="fans item"><span>{{ getUserInfo.fans }}</span> fans</div>
+            <div class="following item"><span>{{ getUserInfo.following }}</span> following</div>
           </div>
           <div class="footer">
-            <div class="name">Sarthak Neupane</div>
+            <div class="name">{{ getUserInfo.firstName + '' + getUserInfo.lastName }}</div>
             <!-- <div class="bio">
               <p> Voluptatibus veritatis eveniet expedita minima culpa quaerat!
               </p>
@@ -41,12 +41,12 @@
     <section v-else class="mobile_about">
       <div class="top__half">
         <div class="display_pic">
-          <img v-if="!getUser.photoURL" src="../assets/profilePic.jpg" alt="" />
-          <img v-else :src="getUser.photoURL" alt="" />
+          <img v-if="!getUserInfo.photoURL" src="../assets/profile.webp" alt="" />
+          <img v-else :src="getUserInfo.photoURL" alt="" />
         </div>
         <div class="about">
           <div class="header">
-            <div class="username"><p>sa_rt_hak_</p></div>
+            <div class="username"><p>{{ getUserInfo.displayName }}</p></div>
             <div class="edit_profile">
               <button>Edit Profile</button>
             </div>
@@ -55,20 +55,20 @@
       </div>
 
       <div class="footer">
-        <div class="name">Sarthak Neupane</div>
+        <div class="name">{{ getUserInfo.firstName + '' + getUserInfo.lastName }}</div>
       </div>
 
       <div class="body">
         <div class="goals item">
-          <div>2</div>
+          <div>{{ getUserInfo.goals }}</div>
           goals
         </div>
         <div class="fans item">
-          <div>118</div>
+          <div>{{ getUserInfo.fans }}</div>
           fans
         </div>
         <div class="following item">
-          <div>177</div>
+          <div>{{ getUserInfo.following }}</div>
           following
         </div>
       </div>
@@ -95,17 +95,33 @@ export default {
         return JSON.parse(localStorage.getItem("User"));
       }
     },
-    // getWidth() {
-    //   return this.width;
-    // },
-  },
+    getCurrentName(){
+      return this.$store.getters["auth/get_the_user"].displayName
+    },
+    getId(){
+      return this.$route.params.id
+    },
+    getUserInfo(){
+      return this.$store.getters["database/get_user_info"]
+    } 
+    },
   created(){
     window.addEventListener('resize', this.getWidth())
     this.getWidth()
+    this.getInformation()
   },
   methods: {
     getWidth() {
       this.width =  window.innerWidth 
+    },
+    async getInformation(){
+      try {
+        this.loading = true
+        await this.$store.dispatch("database/getData", this.getId)
+        this.loading= false
+      } catch (error) {
+        this.error = error.message
+      }
     },
     async signout() {
       try {

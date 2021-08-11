@@ -22,10 +22,37 @@ const routes = [
     },
   },
   {
-    path: "/profile",
+    path: "/:id/profile",
     name: "Profile",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Profile.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/inbox",
+    name: "Message",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Message.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/explore",
+    name: "Explore",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Explore.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/saved",
+    name: "Saved",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Saved.vue"),
     meta: {
       requiresAuth: true,
     },
@@ -35,12 +62,18 @@ const routes = [
     name: "Login",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Login.vue"),
+      meta: {
+        hideNavbar: true,
+      },
   },
   {
     path: "/signup",
     name: "SignUp",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Signup.vue"),
+      meta: {
+        hideNavbar: true,
+      },
   },
 ];
 
