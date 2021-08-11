@@ -5,7 +5,7 @@ import store from "../store/index.js";
 const routes = [
   {
     path: "/",
-    redirect: "/:id/feed",
+    redirect: `/feed`,
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Feed.vue"),
     meta: {
@@ -13,7 +13,7 @@ const routes = [
     },
   },
   {
-    path: "/:id/feed",
+    path: "/feed",
     name: "Feed",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Feed.vue"),
@@ -22,7 +22,7 @@ const routes = [
     },
   },
   {
-    path: "/:id/profile",
+    path: "/profile",
     name: "Profile",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Profile.vue"),

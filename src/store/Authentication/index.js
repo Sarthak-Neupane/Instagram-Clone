@@ -8,7 +8,7 @@ export default {
   state() {
     return {
       error: null,
-      user: null,
+      user: JSON.parse(localStorage.getItem('User')),
     };
   },
   mutations,

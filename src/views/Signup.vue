@@ -138,7 +138,7 @@ export default {
         const userAccount = this.$store.getters["auth/get_the_user"];
 
         if (userAccount) {
-          this.$router.replace(`/${userAccount.uid}/profile`);
+          this.$router.replace(`/profile`);
         }
       } catch (error) {
         this.error = error.message;
@@ -152,7 +152,7 @@ export default {
         const userAccount = this.$store.getters["auth/get_the_user"];
 
         if (userAccount) {
-          this.$router.replace(`/${userAccount.uid}/profile`);
+          this.$router.replace(`/profile`);
         }
       } catch (error) {
         console.log(error)

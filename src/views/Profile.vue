@@ -9,29 +9,67 @@
     <template #main> {{ error }} </template>
   </base-dialog>
   <main v-else class="profile__container">
-    <section>
+    <section v-if="width > 768">
       <div class="top__half">
         <div class="display_pic">
-          <!-- <img src="../assets/profilePic.jpg" alt="" /> -->
-          <img :src="getUser.photoURL" alt="" />
+          <img v-if="!getUser.photoURL" src="../assets/profilePic.jpg" alt="" />
+          <img v-else :src="getUser.photoURL" alt="" />
         </div>
         <div class="about">
           <div class="header">
-            <div class="username"><p>sa_rt_hak</p></div>
+            <div class="username"><p>sa_rt_hak_</p></div>
             <div class="edit_profile">
               <button>Edit Profile</button>
             </div>
           </div>
           <div class="body">
-            <div class="goals">2 goals</div>
-            <div class="fans">118 fans</div>
-            <div class="following">182 following</div>
+            <div class="goals item"><span>2</span> goals</div>
+            <div class="fans item"><span>118</span> fans</div>
+            <div class="following item"><span>177</span> following</div>
           </div>
           <div class="footer">
             <div class="name">Sarthak Neupane</div>
-            <!-- <div class="links">
-                      </div> -->
+            <!-- <div class="bio">
+              <p> Voluptatibus veritatis eveniet expedita minima culpa quaerat!
+              </p>
+            </div> -->
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section v-else class="mobile_about">
+      <div class="top__half">
+        <div class="display_pic">
+          <img v-if="!getUser.photoURL" src="../assets/profilePic.jpg" alt="" />
+          <img v-else :src="getUser.photoURL" alt="" />
+        </div>
+        <div class="about">
+          <div class="header">
+            <div class="username"><p>sa_rt_hak_</p></div>
+            <div class="edit_profile">
+              <button>Edit Profile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="name">Sarthak Neupane</div>
+      </div>
+
+      <div class="body">
+        <div class="goals item">
+          <div>2</div>
+          goals
+        </div>
+        <div class="fans item">
+          <div>118</div>
+          fans
+        </div>
+        <div class="following item">
+          <div>177</div>
+          following
         </div>
       </div>
     </section>
@@ -45,6 +83,7 @@ export default {
     return {
       error: null,
       loading: false,
+      width: null,
     };
   },
   computed: {
@@ -56,13 +95,23 @@ export default {
         return JSON.parse(localStorage.getItem("User"));
       }
     },
+    // getWidth() {
+    //   return this.width;
+    // },
+  },
+  created(){
+    window.addEventListener('resize', this.getWidth())
+    this.getWidth()
   },
   methods: {
+    getWidth() {
+      this.width =  window.innerWidth 
+    },
     async signout() {
       try {
-        this.loading = true
+        this.loading = true;
         await this.$store.dispatch("auth/sign_out");
-        this.loading= false
+        this.loading = false;
         this.$router.replace({ name: "Login" });
       } catch (error) {
         console.log(error);
@@ -78,10 +127,17 @@ export default {
 
 <style lang="scss" scoped>
 main {
-  padding: 0 15rem;
-  width: 100vw;
+  margin: 0 auto;
+  width: 100%;
+  min-width: 25rem;
+  max-width: 50rem;
   height: 100%;
+  min-height: 100vh;
 
+  @media screen and (max-width: 768px) {
+        min-width: 100%;
+      }
+      
   section {
     width: 100%;
 
@@ -91,33 +147,182 @@ main {
       align-items: center;
       height: calc(2rem + 200px);
 
+      @media screen and (max-width: 768px) {
+        height: 100%;
+      }
       .display_pic {
         width: 30%;
-        border: 1px solid black;
         overflow: hidden;
         padding: 1rem;
         height: 100%;
+
+         @media screen and (max-width: 768px) {
+            width: 40%;
+          }
 
         img {
           height: 170px;
           width: 170px;
           border-radius: 50%;
           object-fit: cover;
+
+          @media screen and (max-width: 768px) {
+            width: 100px;
+            height: 100px;
+          }
         }
       }
 
       .about {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: flex-start;
         width: 70%;
         height: 100%;
         padding: 1rem;
-        border: 1px solid red;
+
+         @media screen and (max-width: 768px) {
+            width: 80%;
+          }
+        // border: 1px solid red;
+
+        .header {
+          display: flex;
+          width: 100%;
+
+          @media screen and (max-width: 768px) {
+            flex-direction: column;
+          }
+
+          .username {
+            margin-right: 2rem;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 28px;
+            color: #262626;
+            font-weight: 300;
+          }
+
+          .edit_profile {
+            // border: 1px solid black;
+            display: flex;
+            align-items: center;
+
+             @media screen and (max-width: 768px) {
+            width: 100%;
+          }
+
+            button {
+              font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+              font-weight: 600;
+              font-size: 14px;
+              background: #fafafa;
+              border: 1px solid #e4e4e4;
+              border-radius: 4px;
+              outline: none;
+              padding: 0.2rem 0.5rem;
+
+              @media screen and (max-width: 768px) {
+            width: 100%;
+            margin-top: 1rem;
+          }
+            }
+          }
+        }
+
+        .body {
+          padding: 1.3rem 0;
+          display: flex;
+
+          .item {
+            margin-right: 1.1rem;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+
+            span {
+              margin-right: 0.1rem;
+              font-weight: 600;
+              font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+              font-size: 1rem;
+            }
+          }
+        }
+
+        .footer {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+
+          .name {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+          }
+
+          .bio {
+            margin-top: 0.7rem;
+            text-align: start;
+            p {
+              font-size: 0.9rem;
+              color: black;
+
+              &::after {
+                content: '"';
+                font-size: 1.3rem;
+                font-weight: 400;
+                font-style: italic;
+              }
+              &::before {
+                content: '"';
+                font-size: 1.3rem;
+                font-weight: 400;
+                font-style: italic;
+              }
+            }
+          }
+        }
       }
     }
   }
+
+  .mobile_about {
+    width: 100%;
+
+    .footer {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 1rem;
+
+      .name {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+    }
+
+    .body {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      // background: yellow;
+      padding: 0.6rem 0.3rem;
+      border: 1px solid #cfcfcf;
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #262626;
+      }
+    }
+  }
+
   .signout {
     background: red;
     color: white;

@@ -84,7 +84,7 @@ export default {
         });
         const userAccount = this.$store.getters["auth/get_the_user"];
         if (userAccount) {
-          this.$router.replace(`/${userAccount.uid}/feed`);
+          this.$router.replace(`/feed`);
         }
       } catch (error) {
         this.error = error.message;
@@ -97,7 +97,7 @@ export default {
         const userAccount = this.$store.getters["auth/get_the_user"];
 
         if (userAccount) {
-          this.$router.replace(`/${userAccount.uid}/feed`);
+          this.$router.replace(`/feed`);
         }
       } catch (error) {
         console.log(error)
@@ -265,6 +265,7 @@ section {
   -ms-flex-direction: column;
   flex-direction: column;
   width: 60%;
+  padding: 2rem 0;
 }
 
 .container .form-contain form .input1,

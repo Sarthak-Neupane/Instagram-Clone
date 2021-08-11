@@ -7,8 +7,8 @@ export default {
     localStorage.setItem("User", JSON.stringify(payload));
     state.user = payload;
   },
-  sign_the_user_out(state) {
+  sign_the_user_out() {
     localStorage.clear();
-    state.user = null;
+    // state.user = null;
   },
 };
