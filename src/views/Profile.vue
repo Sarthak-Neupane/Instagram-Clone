@@ -19,7 +19,7 @@
           <div class="header">
             <div class="username"><p>{{ getUserInfo.displayName }}</p></div>
             <div class="edit_profile">
-              <button>Edit Profile</button>
+              <router-link :to="getEditPath"> <button>Edit Profile</button> </router-link> 
             </div>
           </div>
           <div class="body">
@@ -28,7 +28,7 @@
             <div class="following item"><span>{{ getUserInfo.following }}</span> following</div>
           </div>
           <div class="footer">
-            <div class="name">{{ getUserInfo.firstName + '' + getUserInfo.lastName }}</div>
+            <div class="name">{{ getFullname }}</div>
             <!-- <div class="bio">
               <p> Voluptatibus veritatis eveniet expedita minima culpa quaerat!
               </p>
@@ -48,14 +48,14 @@
           <div class="header">
             <div class="username"><p>{{ getUserInfo.displayName }}</p></div>
             <div class="edit_profile">
-              <button>Edit Profile</button>
+              <router-link :to="getEditPath"> <button>Edit Profile</button> </router-link> 
             </div>
           </div>
         </div>
       </div>
 
       <div class="footer">
-        <div class="name">{{ getUserInfo.firstName + '' + getUserInfo.lastName }}</div>
+        <div class="name">{{ getFullname }}</div>
       </div>
 
       <div class="body">
@@ -103,7 +103,17 @@ export default {
     },
     getUserInfo(){
       return this.$store.getters["database/get_user_info"]
-    } 
+    },
+    getFullname(){
+      if(this.getUserInfo.firstName && this.getUserInfo.lastName){
+        return this.getUserInfo.firstName + '' + this.getUserInfo.lastName
+      }else{
+        return this.getUserInfo.displayName
+      }
+    },
+    getEditPath(){
+      return `/${this.getId}/profile/edit/edit`
+    }
     },
   created(){
     window.addEventListener('resize', this.getWidth())

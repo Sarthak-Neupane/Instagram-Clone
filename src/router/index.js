@@ -31,6 +31,81 @@ const routes = [
     },
   },
   {
+    path: "/:id/profile/edit",
+    name: "ProfileEdit",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Edit.vue"),
+    children: [
+      {
+        path: "edit",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/EditProfile.vue"
+          ),
+      },
+      {
+        path: "changepassword",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/ChangePassword.vue"
+          ),
+      },
+      {
+        path: "Apps and Websites",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/AppsWebsites.vue"
+          ),
+      },
+      {
+        path: "Email and SMS",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/EmailSms.vue"
+          ),
+      },
+      {
+        path: "Push Notifications",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/PushNotif.vue"
+          ),
+      },
+      {
+        path: "Manage Contacts",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/ManageContacts.vue"
+          ),
+      },
+      {
+        path: "Privacy and Security",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/PrivacySecurity.vue"
+          ),
+      },
+      {
+        path: "Login Activity",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/LoginActivity.vue"
+          ),
+      },
+      {
+        path: "Emails from Goalgram",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/EmailsGoalgram.vue"
+          ),
+      },
+     
+    ],
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/inbox",
     name: "Message",
     component: () =>
@@ -62,18 +137,18 @@ const routes = [
     name: "Login",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Login.vue"),
-      meta: {
-        hideNavbar: true,
-      },
+    meta: {
+      hideNavbar: true,
+    },
   },
   {
     path: "/signup",
     name: "SignUp",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Signup.vue"),
-      meta: {
-        hideNavbar: true,
-      },
+    meta: {
+      hideNavbar: true,
+    },
   },
 ];
 
@@ -85,17 +160,17 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   let isAuthenticated;
-  if(localStorage.getItem('User')){
-    isAuthenticated = JSON.parse(localStorage.getItem('User'))
-  }else {
-     isAuthenticated = store.getters["auth/get_the_user"];
+  if (localStorage.getItem("User")) {
+    isAuthenticated = JSON.parse(localStorage.getItem("User"));
+  } else {
+    isAuthenticated = store.getters["auth/get_the_user"];
   }
   if (requiresAuth && !isAuthenticated) {
     next({ name: "Login" });
   } else {
     next();
   }
-  console.log("isauthenticated", JSON.parse(localStorage.getItem('User')));
+  console.log("isauthenticated", JSON.parse(localStorage.getItem("User")));
 });
 
 export default router;
