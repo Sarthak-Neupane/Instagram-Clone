@@ -11,6 +11,7 @@ export default {
     const docRef = await db.collection("users").doc(auth.currentUser.uid).set({
       firstName: payload.firstName,
       lastName: payload.lastName,
+      displayName: auth.currentUser.displayName,
       bio: null,
       friends: [],
       website: null,
