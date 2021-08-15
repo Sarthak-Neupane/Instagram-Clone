@@ -5,7 +5,7 @@
     mode="red"
     circleMode="circleRed"
   >
-    <template #title> Couldn't Sign Out. Please Try Again. </template>
+    <template #title>Aww Snap! Please Try Again. </template>
     <template #main> {{ error }} </template>
   </base-dialog>
   <main v-if="!error && !loading" class="profile__container">
@@ -29,10 +29,13 @@
           </div>
           <div class="footer">
             <div class="name">{{ getFullname }}</div>
-            <!-- <div class="bio">
-              <p> Voluptatibus veritatis eveniet expedita minima culpa quaerat!
+            <div class="bio">
+              <p> {{ getUserInfo.bio }}
               </p>
-            </div> -->
+            </div>
+            <div class="website">
+              <a :href="getUserInfo.website" target="_blank">{{getUserInfo.website}}</a>
+            </div>
           </div>
         </div>
       </div>
@@ -56,6 +59,13 @@
 
       <div class="footer">
         <div class="name">{{ getFullname }}</div>
+        <div class="bio">
+              <p> {{ getUserInfo.bio }}
+              </p>
+            </div>
+            <div class="website">
+              <a :href="getUserInfo.website">{{getUserInfo.website}}</a>
+            </div>
       </div>
 
       <div class="body">
@@ -106,7 +116,7 @@ export default {
     },
     getFullname(){
       if(this.getUserInfo.firstName && this.getUserInfo.lastName){
-        return this.getUserInfo.firstName + '' + this.getUserInfo.lastName
+        return this.getUserInfo.firstName + ' ' + this.getUserInfo.lastName
       }else{
         return this.getUserInfo.displayName
       }
@@ -288,24 +298,23 @@ main {
           }
 
           .bio {
-            margin-top: 0.7rem;
             text-align: start;
+            margin: .5rem 0;
             p {
-              font-size: 0.9rem;
-              color: black;
+              font-size: 1rem;
+              color: #262626;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+          }
 
-              &::after {
-                content: '"';
-                font-size: 1.3rem;
-                font-weight: 400;
-                font-style: italic;
-              }
-              &::before {
-                content: '"';
-                font-size: 1.3rem;
-                font-weight: 400;
-                font-style: italic;
-              }
+          .website{
+
+            a{
+              color: #00376b;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-weight: 600;
+              font-size: 1rem;
+              text-decoration: none;
             }
           }
         }
@@ -328,6 +337,26 @@ main {
         font-weight: 600;
         font-size: 1rem;
       }
+        .bio {
+            text-align: start;
+            margin: .5rem 0;
+            p {
+              font-size: 1rem;
+              color: #262626;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+          }
+
+          .website{
+
+            a{
+              color: #00376b;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-weight: 600;
+              font-size: 1rem;
+              text-decoration: none;
+            }
+          }
     }
 
     .body {

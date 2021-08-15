@@ -8,6 +8,7 @@ import actions from "./actions"
 
 import authentication from './Authentication/index.js'
 import database from './Database/index.js'
+import storage from './Storage/index.js'
 
 export default createStore({
   state() {
@@ -18,6 +19,7 @@ export default createStore({
   actions,
   modules: {
     auth : authentication,
-    database: database
+    database: database,
+    storage: storage,
   },
 });

@@ -8,42 +8,52 @@ export default {
       displayName: `${payload.firstName}`,
     });
 
-    const docRef = await db.collection("users").doc(auth.currentUser.uid).set({
-      firstName: payload.firstName,
-      lastName: payload.lastName,
-      displayName: auth.currentUser.displayName,
-      bio: null,
-      friends: [],
-      website: null,
-      fans: 0,
-      following: 0,
-      goals: 0,
-      photoURL: auth.currentUser.photoURL
-    });
-
-    console.log(docRef);
-
+    if(!db.collection("users").doc(auth.currentUser.uid)){
+      const docRef = await db.collection("users").doc(auth.currentUser.uid).set({
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        displayName: auth.currentUser.displayName,
+        bio: null,
+        friends: [],
+        website: null,
+        fans: 0,
+        following: 0,
+        goals: 0,
+        photoURL: auth.currentUser.photoURL
+      });
+  
+      console.log(docRef);
+  
+    }
     context.commit("sign_up_the_user", auth.currentUser);
   },
 
   async signUpWithGoogle(context) {
-    const result = await auth.signInWithPopup(provider);
+    let result;
+    if(window.innerWidth > 768){
+       result = await auth.signInWithPopup(provider);
+    }else{
+       result = await auth.signInWithRedirect(provider);
+    }
     const user = result.user;
 
-    const docRef =   await db.collection("users").doc(auth.currentUser.uid).set({
-      firstName: null,
-      lastName: null,
-      displayName: auth.currentUser.displayName,
-      bio: null,
-      friends: [],
-      website: null,
-      fans: 0,
-      following: 0,
-      goals: 0,
-      photoURL: auth.currentUser.photoURL
-  })
+    if(!db.collection("users").doc(auth.currentUser.uid)){
 
-    console.log(docRef);
+      const docRef =   await db.collection("users").doc(auth.currentUser.uid).set({
+        firstName: null,
+        lastName: null,
+        displayName: auth.currentUser.displayName,
+        bio: null,
+        friends: [],
+        website: null,
+        fans: 0,
+        following: 0,
+        goals: 0,
+        photoURL: auth.currentUser.photoURL
+    })
+  
+      console.log(docRef);
+    }
 
     context.commit("sign_up_the_user", user);
   },

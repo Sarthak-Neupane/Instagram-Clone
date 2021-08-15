@@ -303,7 +303,7 @@ section {
 
 .container .form-contain form input {
   padding: 5px 10px;
-  width: 80%;
+  width: 100%;
   margin: 0.8rem 0;
   outline: none;
   border: none;
