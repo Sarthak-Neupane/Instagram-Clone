@@ -8,6 +8,7 @@ export default {
   state() {
     return {
       userProfilePic: null,
+      
     };
   },
   mutations,

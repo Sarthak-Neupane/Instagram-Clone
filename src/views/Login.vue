@@ -1,13 +1,17 @@
 <template>
-  <base-dialog
-    v-if="error"
-    @close-dialog="close"
-    mode="red"
-    circleMode="circleRed"
-  >
-    <template #title> Couldn't Log In </template>
-    <template #main> {{ error }} </template>
-  </base-dialog>
+<teleport to="body">
+    <base-dialog
+      v-if="error"
+      @close-dialog="close"
+      mode="red"
+      circleMode="circleRed"
+    >
+      <template #title>Aww Snap! Please Try Again. </template>
+      <template #main> {{ error }} </template>
+    </base-dialog>
+
+    <base-spinner v-if="loading"></base-spinner>
+  </teleport>
   <section>
     <div class="container">
       <div class="form-contain">

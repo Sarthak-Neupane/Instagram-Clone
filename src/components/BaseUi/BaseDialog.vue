@@ -18,6 +18,7 @@
 <script>
 export default {
   props: ["mode", "circleMode"],
+  emits:['close-dialog'],
   methods: {
     close() {
       this.$emit("close-dialog");
@@ -51,6 +52,7 @@ export default {
   overflow: hidden;
   background: whitesmoke;
   box-shadow: 1px 1px 7px 18px rgba(0, 0, 0, 0.4);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   .red {
     background: rgb(252, 28, 28);
@@ -71,6 +73,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 .5rem;
 
     .circle {
       position: absolute;

@@ -9,6 +9,7 @@ export default {
     return {
       error: null,
       userInfo: null,
+      posts: [],
     };
   },
   mutations,

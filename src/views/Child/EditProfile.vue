@@ -1,13 +1,17 @@
 <template>
-  <base-dialog
-    v-if="error"
-    @close-dialog="close"
-    mode="red"
-    circleMode="circleRed"
-  >
-    <template #title>Aww Snap! Please Try Again. </template>
-    <template #main> {{ error }} </template>
-  </base-dialog>
+  <teleport to="body">
+    <base-dialog
+      v-if="error"
+      @close-dialog="close"
+      mode="red"
+      circleMode="circleRed"
+    >
+      <template #title>Aww Snap! Please Try Again. </template>
+      <template #main> {{ error }} </template>
+    </base-dialog>
+
+    <base-spinner v-if="loading"></base-spinner>
+  </teleport>
   <div v-if="!error && !loading" class="main">
     <form @submit.prevent="submitData">
       <div class="change-photo">
@@ -23,7 +27,7 @@
           <p>{{ getUserInfo.displayName }}</p>
           <div class="profile_upload">
             <label for="file">Change Profile Photo</label>
-            <input type="file" id="file" @change="updateProfile" ref="file"/>
+            <input type="file" id="file" @change="updateProfile" ref="file" />
           </div>
         </div>
       </div>
@@ -182,28 +186,28 @@ export default {
       }
     },
 
-    async updateProfile(){
-      const file = this.$refs.file.files[0]
+    async updateProfile() {
+      const file = this.$refs.file.files[0];
 
       try {
-        this.loading = true 
-        await this.$store.dispatch('storage/changeProfilePic', {
-        id: this.getId,
-        file: file,
-      })
-      this.loading = false
+        this.loading = true;
+        await this.$store.dispatch("storage/changeProfilePic", {
+          id: this.getId,
+          file: file,
+        });
+        this.loading = false;
       } catch (error) {
-        this.error = error.message
+        this.error = error.message;
+        this.loading = null;
       }
-
     },
 
     formChanged() {
       this.disable = false;
     },
 
-    close(){
-      this.error = null
+    close() {
+      this.error = null;
     },
 
     async submitData() {
@@ -237,7 +241,7 @@ export default {
   left: 0;
 }
 
-.error{
+.error {
   color: red;
 }
 main {
@@ -295,7 +299,7 @@ main {
       padding: 0.2rem 0.3rem;
       height: 3rem;
       border: 1px solid #cfcfcf;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       font-size: 1rem;
       color: #262626;
     }

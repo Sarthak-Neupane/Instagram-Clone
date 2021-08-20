@@ -8,7 +8,10 @@ export default {
       displayName: `${payload.firstName}`,
     });
 
-    if(!db.collection("users").doc(auth.currentUser.uid)){
+    const main = await db.collection("users").doc(auth.currentUser.uid).get()
+    console.log(main.exists)
+
+    if(!main.exists){
       const docRef = await db.collection("users").doc(auth.currentUser.uid).set({
         firstName: payload.firstName,
         lastName: payload.lastName,
@@ -16,10 +19,11 @@ export default {
         bio: null,
         friends: [],
         website: null,
-        fans: 0,
-        following: 0,
-        goals: 0,
-        photoURL: auth.currentUser.photoURL
+        fans: [],
+        following: [],
+        goals: [],
+        photoURL: auth.currentUser.photoURL,
+        gender: null
       });
   
       console.log(docRef);
@@ -37,7 +41,10 @@ export default {
     }
     const user = result.user;
 
-    if(!db.collection("users").doc(auth.currentUser.uid)){
+    const main = await db.collection("users").doc(auth.currentUser.uid).get()
+    console.log(main.exists)
+
+    if(!main.exists){
 
       const docRef =   await db.collection("users").doc(auth.currentUser.uid).set({
         firstName: null,
@@ -46,10 +53,11 @@ export default {
         bio: null,
         friends: [],
         website: null,
-        fans: 0,
-        following: 0,
-        goals: 0,
-        photoURL: auth.currentUser.photoURL
+        fans: [],
+        following: [],
+        goals: [],
+        photoURL: auth.currentUser.photoURL,
+        gender: null
     })
   
       console.log(docRef);

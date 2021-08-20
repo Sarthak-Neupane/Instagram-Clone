@@ -1,13 +1,17 @@
 <template>
-  <base-dialog
-    v-if="error"
-    @close-dialog="close"
-    mode="red"
-    circleMode="circleRed"
-  >
-    <template #title>Aww Snap! Please Try Again. </template>
-    <template #main> {{ error }} </template>
-  </base-dialog>
+<teleport to="body">
+    <base-dialog
+      v-if="error"
+      @close-dialog="close"
+      mode="red"
+      circleMode="circleRed"
+    >
+      <template #title>Aww Snap! Please Try Again. </template>
+      <template #main> {{ error }} </template>
+    </base-dialog>
+
+    <base-spinner v-if="loading"></base-spinner>
+  </teleport>
   <main v-if="!error && !loading" class="profile__container">
     <section v-if="width > 768">
       <div class="top__half">
@@ -23,8 +27,8 @@
             </div>
           </div>
           <div class="body">
-            <div class="goals item"><span>{{ getUserInfo.goals }}</span> goals</div>
-            <div class="fans item"><span>{{ getUserInfo.fans }}</span> fans</div>
+            <div class="goals item"><span>{{ getUserInfo.goals.length }}</span> goals</div>
+            <div class="fans item"><span>{{ getUserInfo.fans.length }}</span> fans</div>
             <div class="following item"><span>{{ getUserInfo.following }}</span> following</div>
           </div>
           <div class="footer">
@@ -142,6 +146,8 @@ export default {
       } catch (error) {
         this.error = error.message
       }
+
+      console.log(this.getUserInfo)
     },
     async signout() {
       try {
