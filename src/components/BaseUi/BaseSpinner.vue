@@ -26,7 +26,7 @@ export default {
   border:8px solid;
   border-color:#000 #0000;
   animation:s1 1s infinite;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   z-index: 999;

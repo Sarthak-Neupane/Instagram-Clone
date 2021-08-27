@@ -1,4 +1,17 @@
 <template>
+<teleport to="body">
+    <base-dialog
+      v-if="error"
+      @close-dialog="close"
+      mode="red"
+      circleMode="circleRed"
+    >
+      <template #title>Aww Snap! Please Try Again. </template>
+      <template #main> {{ error }} </template>
+    </base-dialog>
+
+    <base-spinner v-if="loading"></base-spinner>
+  </teleport>
   <div class="card">
     <header>
       <img :src="authorURL" alt="" />
@@ -26,16 +39,18 @@
         <span>{{ likes }} Likes</span>
       </div>
       <div class="caption">
-        <span>{{ author }}</span>
+       <span>
+          <router-link :to="getPath">{{ author }} </router-link>
+        </span>
         <p>{{ caption }}</p>
       </div>
       <div class="view-comments">
         <p>
-          View all <span> {{ numberOfComments }} </span> comments
+          View all <span> {{ numberOfComments }} </span> comment(s)
         </p>
       </div>
       <div class="top-comment">
-        <span>{{ topCommentAuthor }}</span>
+        <span> <router-link :to=" '/' + topCommentAuthorId + '/' + 'profile/goals' ">  {{ topCommentAuthor }} </router-link></span>
         <p>{{ topComment }}</p>
       </div>
       <div class="time">
@@ -62,6 +77,12 @@ export default {
     Heart,
     Comment,
     Bookmark,
+  },
+  data(){
+    return{
+      loading: null,
+      error: null,
+    }
   },
   computed: {
     getPath() {
@@ -92,20 +113,27 @@ export default {
     "topComment",
     "time",
     "id",
-    "parent"
+    "parent",
+    "topCommentAuthorId"
   ],
   methods:{
-    sendComment(){
+    async sendComment(){
       if(this.$refs.comment.value !== ""){
-        console.log(this.$refs.comment.value)
         console.log(this.parent)
-        this.$store.dispatch('database/addComment', {
-          postid: this.parent,
-          postAuthor: this.id,
-          comment: this.$refs.comment.value,
+        try {
+          this.loading = true
+          await this.$store.dispatch('database/addComment', {
+            postid: this.parent,
+            postAuthor: this.id,
+            comment: this.$refs.comment.value,
         })
+        this.loading = false
+        this.$refs.comment.value = ""
+        } catch (error) {
+          this.error = error.message
+        }
       }else{
-        console.log('bruhh')
+        this.error = 'Please add a comment before posting'
       }
     }
   },
@@ -197,10 +225,13 @@ export default {
       margin-bottom: 0.5rem;
 
       span {
+        a{
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         font-weight: 600;
         color: #262626;
         font-size: 14px;
+        text-decoration: none;
+        }
       }
 
       p {
@@ -228,10 +259,13 @@ export default {
       margin-bottom: 0.5rem;
 
       span {
+        a{
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         font-weight: 600;
         color: #262626;
         font-size: 14px;
+        text-decoration: none;
+        }
       }
 
       p {

@@ -1,4 +1,4 @@
-import { db, auth } from "../../firebase";
+import { db, auth, fb } from "../../firebase";
 
 export default {
   async getData(context, payload) {
@@ -44,13 +44,10 @@ export default {
 
   },
 
-  async getPosts(context, payload){
-    console.log(context, payload)
+  async getPosts(context){
 
    const docRef =  await db.collection(`friend`).get()
-   console.log(docRef)
 
-    console.log(db.collection(`friend`))
 
    const posts = docRef.docs.map((el)=>{
     const value = {
@@ -60,7 +57,6 @@ export default {
     return value
    })
 
-   console.log(posts)
 
    context.commit('savePosts', posts)
 
@@ -71,21 +67,20 @@ export default {
     return docRef.data()
   },
 
-  async addComment(_, payload){
-    console.log(payload)
-    console.log(payload.postid)
+  async addComment(context, payload){
     const toBeAdded = {
       authorPic: auth.currentUser.photoURL,
       authorName: auth.currentUser.displayName,
+      authorId: auth.currentUser.uid,
       comment: payload.comment
     }
-    const docRef2 =  await db.collection(`friend`).doc(`${payload.postid}`).get()
+    // const docRef2 =  await db.collection(`friend`).doc(`${payload.postid}`).get()
 
 
-    //  await db.collection("friend").doc(`${payload.postid}`).update({
-    //    comments: fb.increment(1) ,
-    //    allComments: fb.arrayUnion(toBeAdded)
-    //  });
+     await db.collection("friend").doc(`${payload.postid}`).update({
+       comments: fb.increment(1) ,
+       allComments: fb.arrayUnion(toBeAdded)
+     });
 
     
      const docRef = await db.collection("users").doc(payload.postAuthor).get();
@@ -97,9 +92,12 @@ export default {
        }
       })
       
-      console.log(data)
+      await db.collection("users").doc(payload.postAuthor).set(data);
+      
 
-    console.log(docRef2.data())
-    console.log(toBeAdded)
+    context.commit('add_comment', {
+      ...toBeAdded,
+      id : payload.postid
+    })
   }
 };

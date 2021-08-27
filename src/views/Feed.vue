@@ -25,9 +25,11 @@
       :caption="post.caption"
       :topComment="topComment(post)"
       :topCommentAuthor="topCommentAuthor(post)"
+      :topCommentAuthorId="topCommentAuthorId(post)"
       :time="post.time"
       :id="post.id"
       :parent="post.parentId"
+      :numberOfComments="post.comments"
     >
     </post>
   </div>
@@ -60,14 +62,21 @@ export default {
     },
     topComment(post) {
       if (post.allComments.length > 0) {
-        return post.allComments[0];
+        return post.allComments[0].comment;
+      } else {
+        return null;
+      }
+    },
+    topCommentAuthorId(post){
+      if (post.allComments.length > 0) {
+        return post.allComments[0].authorId;
       } else {
         return null;
       }
     },
     topCommentAuthor(post) {
       if (post.allComments.length > 0) {
-        return post.allComments[0].author;
+        return post.allComments[0].authorName;
       } else {
         return null;
       }

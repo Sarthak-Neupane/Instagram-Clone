@@ -1,3 +1,4 @@
+
 export default {
     set_user_info(state, payload){
         state.userInfo = payload
@@ -12,5 +13,21 @@ export default {
     },
     savePosts(state, payload){
         state.posts = payload
+    },
+
+    add_comment(state, payload){
+
+    state.posts.forEach((post)=>{
+       if(post.parentId === payload.id){
+               post.comments = post.comments + 1
+               post.allComments.push({
+                  authorPic: payload.authorPic,
+                  authorName: payload.authorName,
+                  comment: payload.comment
+        })
+       }
+      })
+
+      console.log(state.posts)
     }
 }

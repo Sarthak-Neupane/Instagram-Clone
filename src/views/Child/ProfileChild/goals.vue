@@ -28,10 +28,10 @@ export default {
     }
   },
   methods:{
-    async getPhotos(){
+    async getPhotos(n){
       this.loading = true
       try {
-      const hello = await this.$store.dispatch('database/getPhoto', this.id)
+      const hello = await this.$store.dispatch('database/getPhoto', n.params.id)
       this.goals = hello.goals
       } catch (error) {
         this.error = error.message
@@ -40,7 +40,12 @@ export default {
     }
   },
   created(){
-    this.getPhotos()
+    this.getPhotos(this.$route)
+  },
+    watch:{
+    $route(n){
+      this.getPhotos(n)
+    }
   },
 };
 </script>
