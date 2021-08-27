@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     getPath() {
-      console.log(this.id);
+      // console.log(this.id);
       return "/" + this.id + "/" + "profile/goals";
     },
     getTheDate() {
@@ -92,11 +92,18 @@ export default {
     "topComment",
     "time",
     "id",
+    "parent"
   ],
   methods:{
     sendComment(){
       if(this.$refs.comment.value !== ""){
         console.log(this.$refs.comment.value)
+        console.log(this.parent)
+        this.$store.dispatch('database/addComment', {
+          postid: this.parent,
+          postAuthor: this.id,
+          comment: this.$refs.comment.value,
+        })
       }else{
         console.log('bruhh')
       }

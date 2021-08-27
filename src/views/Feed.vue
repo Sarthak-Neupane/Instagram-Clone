@@ -27,6 +27,7 @@
       :topCommentAuthor="topCommentAuthor(post)"
       :time="post.time"
       :id="post.id"
+      :parent="post.parentId"
     >
     </post>
   </div>

@@ -50,10 +50,17 @@ export default {
    const docRef =  await db.collection(`friend`).get()
    console.log(docRef)
 
+    console.log(db.collection(`friend`))
 
    const posts = docRef.docs.map((el)=>{
-    return el.data()
+    const value = {
+      ...el.data(),
+      parentId : el.id
+    }
+    return value
    })
+
+   console.log(posts)
 
    context.commit('savePosts', posts)
 
@@ -64,7 +71,35 @@ export default {
     return docRef.data()
   },
 
-  // async addComment(_, payload){
-  //   console.log(payload)
-  // }
+  async addComment(_, payload){
+    console.log(payload)
+    console.log(payload.postid)
+    const toBeAdded = {
+      authorPic: auth.currentUser.photoURL,
+      authorName: auth.currentUser.displayName,
+      comment: payload.comment
+    }
+    const docRef2 =  await db.collection(`friend`).doc(`${payload.postid}`).get()
+
+
+    //  await db.collection("friend").doc(`${payload.postid}`).update({
+    //    comments: fb.increment(1) ,
+    //    allComments: fb.arrayUnion(toBeAdded)
+    //  });
+
+    
+     const docRef = await db.collection("users").doc(payload.postAuthor).get();
+     const data = docRef.data()
+     data.goals.forEach((goal)=>{
+       if(goal.parentId === payload.postid){
+         goal.comments = goal.comments + 1
+         goal.allComments.push(toBeAdded)
+       }
+      })
+      
+      console.log(data)
+
+    console.log(docRef2.data())
+    console.log(toBeAdded)
+  }
 };
