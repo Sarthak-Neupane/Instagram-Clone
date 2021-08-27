@@ -51,13 +51,20 @@ export default {
    console.log(docRef)
 
 
-  //  const allDocs = docRef.docs
-
    const posts = docRef.docs.map((el)=>{
     return el.data()
    })
 
    context.commit('savePosts', posts)
 
-  }
+  },
+
+  async getPhoto(_, payload){
+    const docRef = await db.collection("users").doc(payload).get();
+    return docRef.data()
+  },
+
+  // async addComment(_, payload){
+  //   console.log(payload)
+  // }
 };

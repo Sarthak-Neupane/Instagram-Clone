@@ -1,5 +1,5 @@
 <template>
-<teleport to="body">
+  <teleport to="body">
     <base-dialog
       v-if="error"
       @close-dialog="close"
@@ -16,29 +16,44 @@
     <section v-if="width > 768">
       <div class="top__half">
         <div class="display_pic">
-          <img v-if="!getUserInfo.photoURL" src="../assets/profile.webp" alt="" />
+          <img
+            v-if="!getUserInfo.photoURL"
+            src="../assets/profile.webp"
+            alt=""
+          />
           <img v-else :src="getUserInfo.photoURL" alt="" />
         </div>
         <div class="about">
           <div class="header">
-            <div class="username"><p>{{ getUserInfo.displayName }}</p></div>
+            <div class="username">
+              <p>{{ getUserInfo.displayName }}</p>
+            </div>
             <div class="edit_profile">
-              <router-link :to="getEditPath"> <button>Edit Profile</button> </router-link> 
+              <router-link :to="getEditPath">
+                <button>Edit Profile</button>
+              </router-link>
             </div>
           </div>
           <div class="body">
-            <div class="goals item"><span>{{ getUserInfo.goals.length }}</span> goals</div>
-            <div class="fans item"><span>{{ getUserInfo.fans.length }}</span> fans</div>
-            <div class="following item"><span>{{ getUserInfo.following }}</span> following</div>
+            <div class="goals item">
+              <span>{{ getUserInfo.goals.length }}</span> goals
+            </div>
+            <div class="fans item">
+              <span>{{ getUserInfo.fans.length }}</span> fans
+            </div>
+            <div class="following item">
+              <span>{{ getUserInfo.following.length }}</span> following
+            </div>
           </div>
           <div class="footer">
             <div class="name">{{ getFullname }}</div>
             <div class="bio">
-              <p> {{ getUserInfo.bio }}
-              </p>
+              <p>{{ getUserInfo.bio }}</p>
             </div>
             <div class="website">
-              <a :href="getUserInfo.website" target="_blank">{{getUserInfo.website}}</a>
+              <a :href="getUserInfo.website" target="_blank">{{
+                getUserInfo.website
+              }}</a>
             </div>
           </div>
         </div>
@@ -48,14 +63,22 @@
     <section v-else class="mobile_about">
       <div class="top__half">
         <div class="display_pic">
-          <img v-if="!getUserInfo.photoURL" src="../assets/profile.webp" alt="" />
+          <img
+            v-if="!getUserInfo.photoURL"
+            src="../assets/profile.webp"
+            alt=""
+          />
           <img v-else :src="getUserInfo.photoURL" alt="" />
         </div>
         <div class="about">
           <div class="header">
-            <div class="username"><p>{{ getUserInfo.displayName }}</p></div>
+            <div class="username">
+              <p>{{ getUserInfo.displayName }}</p>
+            </div>
             <div class="edit_profile">
-              <router-link :to="getEditPath"> <button>Edit Profile</button> </router-link> 
+              <router-link :to="getEditPath">
+                <button>Edit Profile</button>
+              </router-link>
             </div>
           </div>
         </div>
@@ -64,31 +87,39 @@
       <div class="footer">
         <div class="name">{{ getFullname }}</div>
         <div class="bio">
-              <p> {{ getUserInfo.bio }}
-              </p>
-            </div>
-            <div class="website">
-              <a :href="getUserInfo.website">{{getUserInfo.website}}</a>
-            </div>
+          <p>{{ getUserInfo.bio }}</p>
+        </div>
+        <div class="website">
+          <a :href="getUserInfo.website">{{ getUserInfo.website }}</a>
+        </div>
       </div>
 
       <div class="body">
         <div class="goals item">
-          <div>{{ getUserInfo.goals }}</div>
+          <div>{{ getUserInfo.goals.length }}</div>
           goals
         </div>
         <div class="fans item">
-          <div>{{ getUserInfo.fans }}</div>
+          <div>{{ getUserInfo.fans.length }}</div>
           fans
         </div>
         <div class="following item">
-          <div>{{ getUserInfo.following }}</div>
+          <div>{{ getUserInfo.following.length }}</div>
           following
         </div>
       </div>
     </section>
-    <button class="signout" @click="signout">Signout</button>
   </main>
+  <div class="bottom">
+    <nav>
+      <ul>
+        <router-link :to=" getPath + 'goals' "> GOALS </router-link>
+        <router-link :to="getPath + 'ggtv'"> GGTV </router-link>
+      </ul>
+    </nav>
+    <router-view></router-view>
+  </div>
+    <button class="signout" @click="signout">Signout</button>
 </template>
 
 <script>
@@ -98,6 +129,7 @@ export default {
       error: null,
       loading: false,
       width: null,
+      id: null,
     };
   },
   computed: {
@@ -109,45 +141,53 @@ export default {
         return JSON.parse(localStorage.getItem("User"));
       }
     },
-    getCurrentName(){
-      return this.$store.getters["auth/get_the_user"].displayName
+    getCurrentName() {
+      return this.$store.getters["auth/get_the_user"].displayName;
     },
-    getId(){
-      return this.$route.params.id
+    getId() {
+      return this.$route.params.id;
     },
-    getUserInfo(){
-      return this.$store.getters["database/get_user_info"]
+    getUserInfo() {
+      return this.$store.getters["database/get_user_info"];
     },
-    getFullname(){
-      if(this.getUserInfo.firstName && this.getUserInfo.lastName){
-        return this.getUserInfo.firstName + ' ' + this.getUserInfo.lastName
-      }else{
-        return this.getUserInfo.displayName
+    getFullname() {
+      if (this.getUserInfo.firstName && this.getUserInfo.lastName) {
+        return this.getUserInfo.firstName + " " + this.getUserInfo.lastName;
+      } else {
+        return this.getUserInfo.displayName;
       }
     },
-    getEditPath(){
-      return `/${this.getId}/profile/edit/edit`
-    }
+    getEditPath() {
+      return `/${this.getId}/profile/edit/edit`;
     },
-  created(){
-    window.addEventListener('resize', this.getWidth())
-    this.getWidth()
-    this.getInformation()
+    getPath(){
+      return `/${this.$route.params.id}/profile/`
+    }
+  },
+  watch:{
+    $route(n){
+      this.getInformation(n)
+    }
+  },
+  created() {
+    window.addEventListener("resize", this.getWidth());
+    this.getWidth();
+    this.getInformation(this.$route);
   },
   methods: {
     getWidth() {
-      this.width =  window.innerWidth 
+      this.width = window.innerWidth;
     },
-    async getInformation(){
+    async getInformation(n) {
       try {
-        this.loading = true
-        await this.$store.dispatch("database/getData", this.getId)
-        this.loading= false
+        this.loading = true;
+        await this.$store.dispatch("database/getData", n.params.id);
+        this.loading = false;
       } catch (error) {
-        this.error = error.message
+        this.error = error.message;
       }
 
-      console.log(this.getUserInfo)
+      console.log(this.getUserInfo);
     },
     async signout() {
       try {
@@ -174,12 +214,12 @@ main {
   min-width: 25rem;
   max-width: 50rem;
   height: 100%;
-  min-height: 100vh;
+  // min-height: 100vh;
 
   @media screen and (max-width: 768px) {
-        min-width: 100%;
-      }
-      
+    min-width: 100%;
+  }
+
   section {
     width: 100%;
 
@@ -198,9 +238,9 @@ main {
         padding: 1rem;
         height: 100%;
 
-         @media screen and (max-width: 768px) {
-            width: 40%;
-          }
+        @media screen and (max-width: 768px) {
+          width: 40%;
+        }
 
         img {
           height: 170px;
@@ -224,9 +264,9 @@ main {
         height: 100%;
         padding: 1rem;
 
-         @media screen and (max-width: 768px) {
-            width: 80%;
-          }
+        @media screen and (max-width: 768px) {
+          width: 80%;
+        }
         // border: 1px solid red;
 
         .header {
@@ -250,9 +290,9 @@ main {
             display: flex;
             align-items: center;
 
-             @media screen and (max-width: 768px) {
-            width: 100%;
-          }
+            @media screen and (max-width: 768px) {
+              width: 100%;
+            }
 
             button {
               font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -265,9 +305,9 @@ main {
               padding: 0.2rem 0.5rem;
 
               @media screen and (max-width: 768px) {
-            width: 100%;
-            margin-top: 1rem;
-          }
+                width: 100%;
+                margin-top: 1rem;
+              }
             }
           }
         }
@@ -305,19 +345,18 @@ main {
 
           .bio {
             text-align: start;
-            margin: .5rem 0;
+            margin: 0.5rem 0;
             p {
               font-size: 1rem;
               color: #262626;
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             }
           }
 
-          .website{
-
-            a{
+          .website {
+            a {
               color: #00376b;
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
               font-weight: 600;
               font-size: 1rem;
               text-decoration: none;
@@ -343,26 +382,25 @@ main {
         font-weight: 600;
         font-size: 1rem;
       }
-        .bio {
-            text-align: start;
-            margin: .5rem 0;
-            p {
-              font-size: 1rem;
-              color: #262626;
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
-          }
+      .bio {
+        text-align: start;
+        margin: 0.5rem 0;
+        p {
+          font-size: 1rem;
+          color: #262626;
+          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+      }
 
-          .website{
-
-            a{
-              color: #00376b;
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              font-weight: 600;
-              font-size: 1rem;
-              text-decoration: none;
-            }
-          }
+      .website {
+        a {
+          color: #00376b;
+          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+          font-weight: 600;
+          font-size: 1rem;
+          text-decoration: none;
+        }
+      }
     }
 
     .body {
@@ -384,10 +422,60 @@ main {
     }
   }
 
+}
   .signout {
     background: red;
     color: white;
     font-size: 3rem;
   }
-}
+
+  .bottom{
+    max-width: 60rem;
+    margin: 0 auto;
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid #5e5e5e;
+      padding: 0;
+  
+      ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        height: 100%;
+  
+        a {
+          text-decoration: none;
+          padding: 1rem 1rem;
+          color: #5e5e5e;
+          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+          margin-right: 2rem;
+          font-weight: 600;
+          font-size: 12px;
+          height: 100%;
+          letter-spacing: 0.1rem;
+  
+          &.router-link-active{
+            color: #262626;
+            position: relative;
+            
+  
+            &::before{
+              content: '';
+              position: absolute;
+              height: 1px;
+              width: 100%;
+              background: #262626;
+              top: -1px;
+              left: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
 </style>

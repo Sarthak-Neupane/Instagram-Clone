@@ -13,6 +13,21 @@ export default {
     await db.collection("users").doc(payload.id).update({
       photoURL: url,
     });
+
+
+    const docRef2 =  await db.collection(`friend`).where("id", "==", auth.currentUser.uid).get()
+
+    
+    const ids = docRef2.docs.map((el)=>{
+     return el.id
+    })
+ 
+    ids.forEach(async (id)=>{
+     await db.collection("friend").doc(id).update({
+       authorPic: url,
+     });
+    })
+
     console.log(context.rootState.auth.user.photoURL)
     context.rootState.auth.user.photoURL = url
     const user = JSON.parse(localStorage.getItem("User"))
@@ -46,41 +61,27 @@ export default {
 
 
     await db.collection(`${payload.visible}/`).add(toBeAdded)
-    
-    const docRef = await db.collection("users").doc(payload.id).get();
-    const info = docRef.data()
 
-  //   const docRef2 =  db.collection("users").doc(payload.id);
 
-  //   docRef2.update({
-  //     goals: fb.arrayUnion(toBeAdded)
-  // });
+    const docRef2 =  db.collection("users").doc(payload.id);
 
-    const goals = info.goals
+    docRef2.update({
+      goals: fb.arrayUnion(toBeAdded)
+  });
 
-    goals.push(toBeAdded)
+    context.rootState.database.posts.unshift(toBeAdded)
+      
+  // const docRef = await db.collection("users").doc(payload.id).get();
+  // const info = docRef.data()
+  //   const goals = info.goals
 
-    context.rootState.database.posts.push(toBeAdded)
+  //   goals.push(toBeAdded)
 
-    await db.collection("users").doc(payload.id).update({
-      goals: goals
-    });
 
-    // await db.collection(`Posts/${payload.visible}/${payload.id}`).doc(payload.id).update({
-    //   goals: db.FieldValue.arrayUnion(toBeAdded)
-    // });
+  //   await db.collection("users").doc(payload.id).update({
+  //     goals: goals
+  //   });
+
 
   }
 };
-
-// id: this.getUser.uid,
-// author: this.getUser.displayName,
-// authorPic: this.getUser.photoURL,
-// file: file,
-// likes: 0,
-// caption: this.caption,
-// visibile: this.radio,
-// comments: 0,
-// allComments: [],
-// allLikes: [],
-// time: new Date().getTime(),

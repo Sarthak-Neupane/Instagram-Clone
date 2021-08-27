@@ -1,5 +1,5 @@
 <template>
-<teleport to="body">
+  <teleport to="body">
     <base-dialog
       v-if="error"
       @close-dialog="close"
@@ -15,7 +15,7 @@
   <post-card v-if="addingPost" @closePost="closeDialog"></post-card>
   <div class="main" v-if="!loading && givePost">
     <addPost @openAdd="openDialog"></addPost>
-      <post
+    <post
       v-for="post in givePost"
       :key="post.time"
       :author="post.author"
@@ -27,89 +27,99 @@
       :topCommentAuthor="topCommentAuthor(post)"
       :time="post.time"
       :id="post.id"
-      >
-      </post>
+    >
+    </post>
   </div>
 </template>
 
 <script>
-import post from '../components/BaseUi/BasePost.vue'
-import addPost from '../components/addPost.vue'
-import postCard from '../components/postCard.vue'
+import post from "../components/BaseUi/BasePost.vue";
+import addPost from "../components/addPost.vue";
+import postCard from "../components/postCard.vue";
 export default {
-  components:{
+  components: {
     post,
     addPost,
-    postCard
+    postCard,
   },
-  data(){
-    return{
+  data() {
+    return {
       error: null,
       loading: false,
       addingPost: false,
-    }
+      post: [],
+    };
   },
-  created(){
-    this.getPosts()
+  created() {
+    this.getPosts();
   },
-  methods:{
-    openDialog(){
-      this.addingPost = true
+  methods: {
+    openDialog() {
+      this.addingPost = true;
     },
-     topComment(post){
-      if(post.allComments.length > 0){
-        return post.allComments[0]
-      }else{
-        return null
-      }
-    },
-    topCommentAuthor(post){
-      if(post.allComments.length > 0){
-        return post.allComments[0].author
-      }else{
-        return null
-      }
-    },
-    async closeDialog(value){
-      console.log(value)
-      if(value === 'noConfirm'){
-         this.addingPost = false
+    topComment(post) {
+      if (post.allComments.length > 0) {
+        return post.allComments[0];
       } else {
-        const confirmNow = confirm("Changes are not saved. Data will be lost")
-        console.log(confirmNow)
-        if(confirmNow){
-          this.addingPost = false
-        } 
+        return null;
+      }
+    },
+    topCommentAuthor(post) {
+      if (post.allComments.length > 0) {
+        return post.allComments[0].author;
+      } else {
+        return null;
+      }
+    },
+    async closeDialog(value) {
+      console.log(value);
+      if (value === "noConfirm") {
+        this.addingPost = false;
+      } else {
+        const confirmNow = confirm("Changes are not saved. Data will be lost");
+        console.log(confirmNow);
+        if (confirmNow) {
+          this.addingPost = false;
+        }
       }
     },
 
-    async getPosts(){
+    async getPosts() {
       try {
-        this.loading = true
-        await this.$store.dispatch('database/getPosts')
-        this.loading = false
-        const posts = this.$store.getters['database/getPosts']
-        console.log(posts)
+        this.loading = true;
+        await this.$store.dispatch("database/getPosts");
+        this.loading = false;
+        const posts = this.$store.getters["database/getPosts"];
+        posts.sort((a, b) => {
+          if (a.time < b.time) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+        this.post = posts
+        console.log(posts);
       } catch (error) {
-        this.loading = false
-        this.error = error.message
+        this.loading = false;
+        this.error = error.message;
       }
     },
-    close(){
-      this.error = null
-    }
-  },
-  computed:{
-    givePost(){
-       return this.$store.getters['database/getPosts']
+    close() {
+      this.error = null;
     },
-   
-  }
+  },
+  computed: {
+    givePost() {
+      //  return this.$store.getters['database/getPosts']
+      // return this.$store.getters["database/getPosts"];
+      return this.post
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.main{
+.main {
   display: grid;
   place-content: center;
 }

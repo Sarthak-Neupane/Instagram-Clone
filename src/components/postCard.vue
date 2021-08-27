@@ -62,11 +62,11 @@
       <!-- <input type="text" placeholder="What's on your mind, Sartman" /> -->
     </div>
     <div class="footer">
-      <!-- <img src="../assets/LoginBackground.jpg" /> -->
+      <img v-if="source" :src="source" />
     </div>
     <div class="add-to-post">
       <h2>Add To Your Post</h2>
-      <input type="file" id="postPic" ref="file" />
+      <input type="file" id="postPic" ref="file" @change="changed"/>
       <label for="postPic"> <photo></photo> </label>
     </div>
     <button @click="sendPost" :class="{ disable: !getDatas }">
@@ -88,11 +88,15 @@ export default {
       radio: "friend",
       loading: false,
       error: null,
+      source: null,
     };
   },
   methods: {
     closePost(value) {
       this.$emit("closePost", value);
+    },
+    changed(){
+      this.source = window.URL.createObjectURL(this.$refs.file.files[0])
     },
     close(){
       this.error = null
@@ -280,10 +284,14 @@ export default {
 
   .footer {
     min-height: 5rem;
+    max-height: 15rem;
+    height: auto;
+    overflow: hidden;
     img {
       height: 100%;
       width: 100%;
       object-fit: cover;
+      transform: translateY(-25%);
     }
   }
 

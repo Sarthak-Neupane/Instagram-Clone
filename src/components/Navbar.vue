@@ -53,7 +53,7 @@ export default {
 
   methods:{
     changeRoute(){
-      this.$router.push(`/${this.getUser.uid}/profile`)
+      this.$router.push(`/${this.getUser.uid}/profile/goals`)
     }
   }
 };

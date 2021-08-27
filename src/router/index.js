@@ -26,6 +26,24 @@ const routes = [
     name: "Profile",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Profile.vue"),
+    children: [
+      {
+        path: "goals",
+        props: true,
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/ProfileChild/goals.vue"
+          ),
+      },
+      {
+        path: "ggtv",
+        props: true,
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Child/ProfileChild/videos.vue"
+          ),
+      },
+    ],
     meta: {
       requiresAuth: true,
     },
@@ -60,9 +78,7 @@ const routes = [
       {
         path: "Email and SMS",
         component: () =>
-          import(
-            /* webpackChunkName: "about" */ "../views/Child/EmailSms.vue"
-          ),
+          import(/* webpackChunkName: "about" */ "../views/Child/EmailSms.vue"),
       },
       {
         path: "Push Notifications",
@@ -99,7 +115,6 @@ const routes = [
             /* webpackChunkName: "about" */ "../views/Child/EmailsGoalgram.vue"
           ),
       },
-     
     ],
     meta: {
       requiresAuth: true,
